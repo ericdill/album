@@ -35,7 +35,7 @@ def run_index():
     headers = [add_human_times_to_header_super_verbose(hdr)
                for hdr in db[start:stop]]
     for hdr in headers:
-        hdr['start']['scan_type'] = getattr(hdr['start'], 'scan_type', '')
+        hdr['start']['scan_type'] = hdr['start'].get('scan_type', '')
     return render_template('run_index.html', headers=headers, page=page,
                            start=start, stop=stop)
 
