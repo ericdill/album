@@ -15,8 +15,8 @@ def add_human_times_to_header_super_verbose(hdr):
     hdr = dict(hdr)
     hdr['start'] = dict(hdr['start'])
     hdr['stop'] = dict(hdr['stop'])
-    hdr['start']['human_time'] = humanize.naturaltime(hdr['start']['time'])
-    hdr['stop']['human_time'] = humanize.naturaltime(hdr['stop']['time'])
+    hdr['start']['human_time'] = doc.pretty_print_time(hdr['start']['time'])
+    hdr['stop']['human_time'] = doc.pretty_print_time(hdr['stop']['time'])
     hdr['stop']['scan_duration'] = humanize.naturaldelta(
         hdr['stop']['time'] - hdr['start']['time'])
     return hdr
