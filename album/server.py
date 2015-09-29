@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from databroker import DataBroker as db, get_table
 from databroker.databroker import doc
 from .bokeh_plot import plot_table_by_time
+import datetime
 import humanize
 
 app = Flask(__name__)
@@ -15,10 +16,10 @@ def add_human_times_to_header_super_verbose(hdr):
     hdr = dict(hdr)
     hdr['start'] = dict(hdr['start'])
     hdr['stop'] = dict(hdr['stop'])
-    hdr['start']['human_time'] = doc.pretty_print_time(hdr['start']['time'])
-    hdr['stop']['human_time'] = doc.pretty_print_time(hdr['stop']['time'])
+    hdr['start']['datetime'] = datetime.datetime.fromtimestamp(hdr['start']['time'])
     hdr['stop']['scan_duration'] = humanize.naturaldelta(
         hdr['stop']['time'] - hdr['start']['time'])
+
     return hdr
 
 
@@ -33,6 +34,8 @@ def run_index():
     start, stop = -RUNS_PER_PAGE * page, -RUNS_PER_PAGE * (page - 1)
     headers = [add_human_times_to_header_super_verbose(hdr)
                for hdr in db[start:stop]]
+    for hdr in headers:
+        hdr['start']['scan_type'] = getattr(hdr['start'], 'scan_type', '')
     return render_template('run_index.html', headers=headers, page=page,
                            start=start, stop=stop)
 
