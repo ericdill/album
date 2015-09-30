@@ -6,6 +6,7 @@ import datetime
 import humanize
 
 app = Flask(__name__)
+app.jinja_options['extensions'].append("jinja2.ext.do")
 
 
 @app.route('/')
@@ -50,6 +51,10 @@ def run_show(uid):
 
     table = get_table(h, fill=True)
     bokeh_kw = plot_table_by_time(table)
+    # print('bokeh_kw.keys() = %s' % list(bokeh_kw.keys()))
+    print('k: v pairs in bokeh_hw')
+    for k, v in bokeh_kw.items():
+        print('%s: %s' % (k, type(v)))
     return render_template('run_show.html', uid=uid, fields=fields,
                            **bokeh_kw)
 

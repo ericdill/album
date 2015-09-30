@@ -29,12 +29,8 @@ def plot_table_by_time(table):
         fig.line(s.index, s, line_width=2)
         fig.circle(s.index, s, fill_color='white', size=8)
         plots.append(fig)
+    plots = {col: plot for col, plot in zip(table, plots)}
+    script, div_dict = components(plots)
 
-    ncols = int(np.ceil(np.sqrt(len(plots))))
-    nrows = int(np.ceil(len(plots) / ncols))
-    rows = [hplot(*plots[row*ncols:(row+1)*ncols]) for row in range(nrows)]
-    plot = vplot(*rows)
-    print('plot = %s' % plot)
-    script, div = components(plot)
-    return {'plot_div': div, 'plot_resources': PLOT_RESOURCES,
+    return {'plot_divs': div_dict, 'plot_resources': PLOT_RESOURCES,
             'plot_script': script, 'bokeh_version': bokeh.__version__}

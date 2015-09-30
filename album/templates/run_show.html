@@ -19,16 +19,33 @@
     {{ plot_script|indent(4)|safe }}
   </head>
   <body>
-    <div class="container-fluid">
-      <h1>Run {{ uid }}</h1>
-      <h2>Fields</h2>
-      <ul>
-        {% for field in fields %}
-          <li>{{ field }}</li>
+    <div class="container-fluid'>
+      <div class="container">
+        <div class="jumbotron">
+          <h1>Run {{ uid }}</h1>
+          <h2>Fields</h2>
+          <ul>
+            {% for field in fields %}
+              <li>{{ field }}</li>
+            {% endfor %}
+            <!-- <li><a href="/run/{{ uid }}/plotter">Plot</a></li> -->
+          </ul>
+        </div>
+        {% set cols = {'sm': 6, 'md': 6, 'lg': 4} %}
+        <div class="row">
+        {% for plot_name, plot_div in plot_divs | dictsort %}
+          {% for name, width in cols | dictsort %}
+            {% if (loop.index+1) % (12//width) == 0 %}
+          <div class="visible-{{ name }}-block clearfix"></div>
+            {% endif %}
+          {% endfor %}
+          <div class="col-lg-{{ cols['lg'] }} col-md-{{ cols['md'] }} col-sm-{{ cols['sm'] }} col-xs-{{ cols['xs'] }} {{ plot_name }}">
+            {{ plot_div|indent(4)|safe }}
+          </div>
         {% endfor %}
-        <!-- <li><a href="/run/{{ uid }}/plotter">Plot</a></li> -->
-      </ul>
-      <body>{{ plot_div|indent(4)|safe }}</body>
+        </div>
+      </div>
     </div>
+
   </body>
 </html>
