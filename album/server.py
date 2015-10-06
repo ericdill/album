@@ -1,10 +1,14 @@
 from flask import Flask, render_template, request
 from databroker import DataBroker as db, get_table
 from databroker.databroker import doc
-from .bokeh_plot import plot_table_by_time
+# from .bokeh_plot import plot_table_by_time
 import humanize
+import pandas as pd
+from bokeh.crossfilter.models import CrossFilter
+from .bokeh_utils import object_page, bokeh_app
 
-app = Flask(__name__)
+
+app = Flask('album.server')
 
 
 @app.route('/')
@@ -45,10 +49,34 @@ def run_show(uid):
         for field in descriptor['data_keys']:
             fields.append(field)
 
-    table = get_table(h, fill=True)
-    bokeh_kw = plot_table_by_time(table)
-    return render_template('run_show.html', uid=uid, fields=fields,
-                           **bokeh_kw)
+    # table = get_table(h, fill=False)
+    # # drop the uid data
+    # new_table = {}
+    # for t in table:
+    #     if not isinstance(table[t][0], str):
+    #         new_table[t] = table[t]
+    # new_table = pd.DataFrame(new_table)
+    # bokeh_kw = plot_table_by_time(new_table)
+    return render_template('run_show.html', uid=uid, fields=fields)
+
+
+@app.route("/run/<uid>/crossfilter")
+@object_page("crossfilter")
+def make_crossfilter(uid):
+    h = db[uid]
+    fields = []
+    for descriptor in h['descriptors']:
+        for field in descriptor['data_keys']:
+            fields.append(field)
+
+    table = get_table(h, fill=False)
+    new_table = {}
+    for t in table:
+        if not isinstance(table[t][0], str):
+            new_table[t] = table[t]
+    # df = pd.DataFrame({a: b for a, b in zip('abcdefg', np.random.random(7, 100))})
+    app = CrossFilter.create(df=new_table)
+    return app
 
 
 def run(debug=True):

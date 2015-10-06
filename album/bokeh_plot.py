@@ -1,10 +1,13 @@
 import bokeh
 from bokeh.embed import components
 from bokeh.plotting import figure
-from bokeh.resources import INLINE
-from bokeh.templates import RESOURCES
+# from bokeh.resources import INLINE
+# from bokeh.templates import RESOURCES
 from bokeh.io import vplot, hplot
 import numpy as np
+from bokeh.crossfilter.models import CrossFilter
+from bokeh.server.utils.plugins import object_page
+import flask
 
 
 PLOT_RESOURCES = RESOURCES.render(

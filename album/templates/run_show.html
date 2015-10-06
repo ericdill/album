@@ -1,7 +1,6 @@
 <!doctype html>
 <html>
   <head>
-    {{ bokeh_script }}
     <title>Run {{ uid }}</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -15,8 +14,6 @@
       href="http://cdn.pydata.org/bokeh/release/bokeh-{{ bokeh_version }}.min.css"
       rel="stylesheet" type="text/css">
     <script src="http://cdn.pydata.org/bokeh/release/bokeh-{{ bokeh_version }}.min.js">
-    {{ plot_resources|indent(4)|safe }}
-    {{ plot_script|indent(4)|safe }}
   </head>
   <body>
     <div class="container-fluid">
@@ -26,9 +23,8 @@
         {% for field in fields %}
           <li>{{ field }}</li>
         {% endfor %}
-        <!-- <li><a href="/run/{{ uid }}/plotter">Plot</a></li> -->
+        <!-- <li><a href="/run/{{ uid }}/crossfilter">Plot</a></li> -->
       </ul>
-      <body>{{ plot_div|indent(4)|safe }}</body>
     </div>
   </body>
 </html>
